@@ -18,6 +18,7 @@
   "ambiguous_identities": 119,
   "parse_failures": 0,
   "quarantined": 8,
-  "kohli_batter_innings": 685,
+  "kohli_batter_innings": 682,
+  "kohli_note": "V Kohli only; T Kohli holds 3 separate rows (total 685 across all Kohli entities)",
   "kohli_max_runs": 183
 }
