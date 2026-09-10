@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: kohliiq-backend
+
+server:
+  port: 8080
+
+# Phase 3+ will add datasource config via environment variables:
+# spring.datasource.url: ${MYSQL_URL:jdbc:mysql://localhost:3306/kohliiq}
+# spring.datasource.username: ${MYSQL_USER:kohliiq}
+# spring.datasource.password: ${MYSQL_PASSWORD:changeme}

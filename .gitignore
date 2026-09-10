@@ -1,0 +1,37 @@
+# Raw datasets (local-only, never commit)
+data/raw/
+*.zip
+
+# Model binaries / artifacts
+ml/artifacts/*
+!ml/artifacts/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Java / Maven
+target/
+*.class
+
+# Node / frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Secrets / env (templates stay tracked)
+.env
+!.env.example
+!frontend/.env.example
+!inference/.env.example
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

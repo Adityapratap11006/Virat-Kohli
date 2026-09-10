@@ -1,0 +1,598 @@
+{
+  "odis": {
+    "files": 3182,
+    "match_type": {
+      "ODI": 3182
+    },
+    "gender": {
+      "male": 2571,
+      "female": 611
+    },
+    "team_type": {
+      "international": 3182
+    },
+    "season_min": "2002",
+    "season_max": "2026",
+    "n_seasons": 52,
+    "date_min": "2002-06-27",
+    "date_max": "2026-09-09",
+    "n_venues": 382,
+    "n_teams": 28,
+    "top_teams": [
+      [
+        "India",
+        654
+      ],
+      [
+        "Australia",
+        601
+      ],
+      [
+        "England",
+        589
+      ],
+      [
+        "Sri Lanka",
+        582
+      ],
+      [
+        "South Africa",
+        543
+      ],
+      [
+        "Pakistan",
+        534
+      ],
+      [
+        "New Zealand",
+        517
+      ],
+      [
+        "West Indies",
+        498
+      ],
+      [
+        "Bangladesh",
+        395
+      ],
+      [
+        "Zimbabwe",
+        314
+      ],
+      [
+        "Ireland",
+        202
+      ],
+      [
+        "Scotland",
+        135
+      ],
+      [
+        "United Arab Emirates",
+        124
+      ],
+      [
+        "Netherlands",
+        112
+      ],
+      [
+        "Nepal",
+        88
+      ]
+    ],
+    "innings_counts": {
+      "2": 3091,
+      "1": 81,
+      "4": 10
+    },
+    "has_registry": 3182,
+    "has_powerplays_innings": 5807,
+    "has_target_innings": 3094,
+    "overs_struct": {
+      "list": 6303
+    },
+    "delivery_keys": {
+      "actual_delivery": 1683966,
+      "batter": 1683966,
+      "bowler": 1683966,
+      "non_striker": 1683966,
+      "runs": 1683966,
+      "extras": 65263,
+      "wickets": 46140,
+      "review": 3448,
+      "replacements": 342
+    },
+    "runs_batter_distinct": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "runs_batter_gt6": 1,
+    "extras_keys": {
+      "wides": 40643,
+      "legbyes": 15923,
+      "noballs": 5996,
+      "byes": 2719,
+      "penalty": 23
+    },
+    "wicket_field_variants": {
+      "wickets": 46140
+    },
+    "wicket_kinds": {
+      "bowled": 8842,
+      "caught": 25641,
+      "run out": 3493,
+      "lbw": 5284,
+      "retired hurt": 74,
+      "stumped": 1260,
+      "caught and bowled": 1497,
+      "hit wicket": 39,
+      "obstructing the field": 7,
+      "retired not out": 4,
+      "timed out": 1
+    },
+    "n_deliveries": 1683966,
+    "n_wickets": 46140,
+    "n_replacements": 342,
+    "n_reviews": 3448,
+    "missing_info_fields": {
+      "city": 306,
+      "event": 14
+    },
+    "kohli_files": 311,
+    "errors": [],
+    "sample_delivery": {
+      "actual_delivery": "0.1",
+      "batter": "DA Warner",
+      "bowler": "Mohammad Amir",
+      "non_striker": "TM Head",
+      "runs": {
+        "batter": 0,
+        "extras": 0,
+        "total": 0
+      }
+    },
+    "sample_wicket": {
+      "actual_delivery": "4.3",
+      "batter": "DA Warner",
+      "bowler": "Mohammad Amir",
+      "non_striker": "TM Head",
+      "runs": {
+        "batter": 0,
+        "extras": 0,
+        "total": 0
+      },
+      "wickets": [
+        {
+          "kind": "bowled",
+          "player_out": "DA Warner"
+        }
+      ]
+    },
+    "sample_info_keys": [
+      "balls_per_over",
+      "city",
+      "dates",
+      "event",
+      "gender",
+      "match_type",
+      "match_type_number",
+      "officials",
+      "outcome",
+      "overs",
+      "player_of_match",
+      "players",
+      "registry",
+      "season",
+      "team_type",
+      "teams",
+      "toss",
+      "venue"
+    ]
+  },
+  "t20s": {
+    "files": 5700,
+    "match_type": {
+      "T20": 5700
+    },
+    "gender": {
+      "male": 3539,
+      "female": 2161
+    },
+    "team_type": {
+      "international": 5700
+    },
+    "season_min": "2004/05",
+    "season_max": "2026",
+    "n_seasons": 46,
+    "date_min": "2005-02-17",
+    "date_max": "2026-09-09",
+    "n_venues": 453,
+    "n_teams": 110,
+    "top_teams": [
+      [
+        "India",
+        453
+      ],
+      [
+        "Pakistan",
+        444
+      ],
+      [
+        "England",
+        407
+      ],
+      [
+        "New Zealand",
+        399
+      ],
+      [
+        "South Africa",
+        390
+      ],
+      [
+        "West Indies",
+        386
+      ],
+      [
+        "Australia",
+        385
+      ],
+      [
+        "Sri Lanka",
+        365
+      ],
+      [
+        "Bangladesh",
+        326
+      ],
+      [
+        "Ireland",
+        282
+      ],
+      [
+        "Zimbabwe",
+        260
+      ],
+      [
+        "United Arab Emirates",
+        238
+      ],
+      [
+        "Hong Kong",
+        226
+      ],
+      [
+        "Netherlands",
+        216
+      ],
+      [
+        "Malaysia",
+        213
+      ]
+    ],
+    "innings_counts": {
+      "2": 5570,
+      "1": 84,
+      "4": 45,
+      "8": 1
+    },
+    "has_registry": 5700,
+    "has_powerplays_innings": 11313,
+    "has_target_innings": 5589,
+    "overs_struct": {
+      "list": 11412
+    },
+    "delivery_keys": {
+      "actual_delivery": 1289472,
+      "batter": 1289472,
+      "bowler": 1289472,
+      "non_striker": 1289472,
+      "runs": 1289472,
+      "extras": 89360,
+      "wickets": 71774,
+      "replacements": 247,
+      "review": 1917
+    },
+    "runs_batter_distinct": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "runs_batter_gt6": 2,
+    "extras_keys": {
+      "wides": 60091,
+      "byes": 6165,
+      "legbyes": 15454,
+      "noballs": 8040,
+      "penalty": 17
+    },
+    "wicket_field_variants": {
+      "wickets": 71774
+    },
+    "wicket_kinds": {
+      "caught": 36034,
+      "run out": 7367,
+      "stumped": 2691,
+      "lbw": 6172,
+      "caught and bowled": 2448,
+      "bowled": 16829,
+      "retired hurt": 103,
+      "obstructing the field": 9,
+      "hit wicket": 73,
+      "retired out": 53,
+      "retired not out": 7,
+      "hit the ball twice": 1,
+      "timed out": 1
+    },
+    "n_deliveries": 1289472,
+    "n_wickets": 71774,
+    "n_replacements": 247,
+    "n_reviews": 1917,
+    "missing_info_fields": {
+      "city": 179,
+      "event": 66
+    },
+    "kohli_files": 159,
+    "errors": [],
+    "sample_delivery": {
+      "actual_delivery": "0.1",
+      "batter": "AJ Finch",
+      "bowler": "SL Malinga",
+      "non_striker": "M Klinger",
+      "runs": {
+        "batter": 0,
+        "extras": 0,
+        "total": 0
+      }
+    },
+    "sample_wicket": {
+      "actual_delivery": "10.3",
+      "batter": "M Klinger",
+      "bowler": "PADLR Sandakan",
+      "non_striker": "AJ Finch",
+      "runs": {
+        "batter": 0,
+        "extras": 0,
+        "total": 0
+      },
+      "wickets": [
+        {
+          "kind": "caught",
+          "player_out": "M Klinger",
+          "fielders": [
+            {
+              "name": "SL Malinga"
+            }
+          ]
+        }
+      ]
+    },
+    "sample_info_keys": [
+      "balls_per_over",
+      "dates",
+      "event",
+      "gender",
+      "match_type",
+      "match_type_number",
+      "officials",
+      "outcome",
+      "overs",
+      "player_of_match",
+      "players",
+      "registry",
+      "season",
+      "team_type",
+      "teams",
+      "toss",
+      "venue"
+    ]
+  },
+  "ipl": {
+    "files": 1243,
+    "match_type": {
+      "T20": 1243
+    },
+    "gender": {
+      "male": 1243
+    },
+    "team_type": {
+      "club": 1243
+    },
+    "season_min": "2007/08",
+    "season_max": "2026",
+    "n_seasons": 24,
+    "date_min": "2008-04-18",
+    "date_max": "2026-05-31",
+    "n_venues": 60,
+    "n_teams": 19,
+    "top_teams": [
+      [
+        "Mumbai Indians",
+        291
+      ],
+      [
+        "Kolkata Knight Riders",
+        278
+      ],
+      [
+        "Chennai Super Kings",
+        266
+      ],
+      [
+        "Rajasthan Royals",
+        251
+      ],
+      [
+        "Royal Challengers Bangalore",
+        240
+      ],
+      [
+        "Sunrisers Hyderabad",
+        211
+      ],
+      [
+        "Kings XI Punjab",
+        190
+      ],
+      [
+        "Delhi Daredevils",
+        161
+      ],
+      [
+        "Delhi Capitals",
+        120
+      ],
+      [
+        "Punjab Kings",
+        88
+      ],
+      [
+        "Gujarat Titans",
+        77
+      ],
+      [
+        "Deccan Chargers",
+        75
+      ],
+      [
+        "Lucknow Super Giants",
+        72
+      ],
+      [
+        "Royal Challengers Bengaluru",
+        46
+      ],
+      [
+        "Pune Warriors",
+        46
+      ]
+    ],
+    "innings_counts": {
+      "2": 1221,
+      "4": 15,
+      "6": 1,
+      "1": 6
+    },
+    "has_registry": 1243,
+    "has_powerplays_innings": 2480,
+    "has_target_innings": 1237,
+    "overs_struct": {
+      "list": 2514
+    },
+    "delivery_keys": {
+      "actual_delivery": 295732,
+      "batter": 295732,
+      "bowler": 295732,
+      "non_striker": 295732,
+      "runs": 295732,
+      "extras": 16227,
+      "wickets": 14705,
+      "replacements": 585,
+      "review": 990
+    },
+    "runs_batter_distinct": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "runs_batter_gt6": 0,
+    "extras_keys": {
+      "wides": 9876,
+      "legbyes": 4406,
+      "noballs": 1226,
+      "byes": 745,
+      "penalty": 2
+    },
+    "wicket_field_variants": {
+      "wickets": 14705
+    },
+    "wicket_kinds": {
+      "caught": 9321,
+      "bowled": 2460,
+      "run out": 1194,
+      "lbw": 883,
+      "caught and bowled": 410,
+      "stumped": 388,
+      "retired hurt": 19,
+      "hit wicket": 20,
+      "obstructing the field": 4,
+      "retired out": 6
+    },
+    "n_deliveries": 295732,
+    "n_wickets": 14705,
+    "n_replacements": 585,
+    "n_reviews": 990,
+    "missing_info_fields": {
+      "city": 51
+    },
+    "kohli_files": 286,
+    "errors": [],
+    "sample_delivery": {
+      "actual_delivery": "0.1",
+      "batter": "DA Warner",
+      "bowler": "TS Mills",
+      "non_striker": "S Dhawan",
+      "runs": {
+        "batter": 0,
+        "extras": 0,
+        "total": 0
+      }
+    },
+    "sample_wicket": {
+      "actual_delivery": "1.4",
+      "batter": "DA Warner",
+      "bowler": "A Choudhary",
+      "non_striker": "S Dhawan",
+      "runs": {
+        "batter": 0,
+        "extras": 0,
+        "total": 0
+      },
+      "wickets": [
+        {
+          "kind": "caught",
+          "player_out": "DA Warner",
+          "fielders": [
+            {
+              "name": "Mandeep Singh"
+            }
+          ]
+        }
+      ]
+    },
+    "sample_info_keys": [
+      "balls_per_over",
+      "city",
+      "dates",
+      "event",
+      "gender",
+      "match_type",
+      "officials",
+      "outcome",
+      "overs",
+      "player_of_match",
+      "players",
+      "registry",
+      "season",
+      "team_type",
+      "teams",
+      "toss",
+      "venue"
+    ]
+  }
+}
