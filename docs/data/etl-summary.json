@@ -1,0 +1,23 @@
+{
+  "phase": 2,
+  "files_seen": 10125,
+  "dispositions": {
+    "ok": 7216,
+    "excluded_incomplete": 129,
+    "excluded_non_v1": 2772,
+    "excluded_anomaly": 8
+  },
+  "records": {
+    "matches": 7216,
+    "innings": 14548,
+    "deliveries": 2440507,
+    "batter_innings": 119619
+  },
+  "missing_city": 454,
+  "ambiguous_player_delivery_hits": 28976,
+  "ambiguous_identities": 119,
+  "parse_failures": 0,
+  "quarantined": 8,
+  "kohli_batter_innings": 685,
+  "kohli_max_runs": 183
+}

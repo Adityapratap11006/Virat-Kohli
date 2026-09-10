@@ -1,5 +1,6 @@
-# Raw datasets (local-only, never commit)
+# Raw + processed datasets (local-only, never commit)
 data/raw/
+data/processed/
 *.zip
 
 # Model binaries / artifacts
