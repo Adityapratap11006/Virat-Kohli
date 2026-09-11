@@ -132,7 +132,11 @@ export default function AnalysisSection({
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className="absolute top-3 right-3 rounded bg-ink/70 px-2 py-0.5 text-[10px] tracking-widest text-zinc-300 uppercase">
-                            Verified fixture image
+                            {img.level === 'exact'
+                              ? 'From this exact match'
+                              : img.level === 'action'
+                                ? 'Virat Kohli in action'
+                                : `Kohli batting vs ${r.opposition}`}
                           </span>
                           <p className="font-display absolute bottom-2 left-4 text-xl text-zinc-50">
                             {r.opposition}
