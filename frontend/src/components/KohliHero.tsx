@@ -62,13 +62,13 @@ export default function KohliHero({ career }: { career: CareerSummary | null }) 
             className="absolute -inset-6 rounded-[2rem] bg-[radial-gradient(ellipse_at_center,rgba(217,169,60,0.14),transparent_65%)]"
           />
           <img
-            src="/images/virat-kohli-portrait.jpg"
-            alt="Portrait of Indian cricketer Virat Kohli"
+            src="/images/kohli-hero-waca-2015.jpg"
+            alt="Virat Kohli batting for India at the WACA under lights, World Cup 2015"
             loading="eager"
             className="relative aspect-[3/3.4] w-full rounded-[1.4rem] border border-line object-cover object-top shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)]"
           />
           <figcaption className="mt-2 text-right text-[11px] text-zinc-600">
-            Photo: Anand Anil, CC BY-SA 4.0, via Wikimedia Commons
+            Photo: Bahnfrend, CC BY-SA 4.0, via Wikimedia Commons
           </figcaption>
           <div
             aria-hidden="true"

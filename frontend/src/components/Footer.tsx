@@ -9,7 +9,7 @@ export default function Footer() {
           </span>
         </p>
         <p className="max-w-xl leading-relaxed">
-          Hero photo: Anand Anil, CC BY-SA 4.0, via{' '}
+          Hero photo: Bahnfrend, CC BY-SA 4.0, via{' '}
           <a
             href="https://commons.wikimedia.org/wiki/File:Virat_Kohli_portrait.jpg"
             className="underline decoration-zinc-600 underline-offset-2 hover:text-gold"

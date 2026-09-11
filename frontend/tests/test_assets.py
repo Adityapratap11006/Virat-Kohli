@@ -88,6 +88,14 @@ def test_fallback_branch_exists():
     assert "Image unavailable" in comp
 
 
+def test_hero_is_action_not_portrait():
+    hero = (REPO / "frontend" / "src" / "components" / "KohliHero.tsx"
+            ).read_text(encoding="utf-8")
+    assert "kohli-hero-waca-2015.jpg" in hero
+    assert "virat-kohli-portrait" not in hero
+    assert "batting" in hero.lower()
+
+
 def _knocks():
     src = (REPO / "frontend" / "src" / "data" / "knockImages.ts"
            ).read_text(encoding="utf-8")
