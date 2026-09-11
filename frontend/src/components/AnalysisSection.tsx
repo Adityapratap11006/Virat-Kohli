@@ -113,30 +113,61 @@ export default function AnalysisSection({
                       key={r.opposition}
                       className="group overflow-hidden rounded-2xl border border-line/70 bg-panel transition-all hover:-translate-y-1 hover:border-gold/40"
                     >
-                      <div className="relative h-40 overflow-hidden">
-                        <img
-                          src={img.src}
-                          alt={img.alt}
-                          loading="lazy"
-                          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                          }}
-                        />
+                      {img ? (
+                        <div className="relative h-40 overflow-hidden">
+                          <img
+                            src={img.imagePath}
+                            alt={img.matchDescription}
+                            loading="lazy"
+                            className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
+                          <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-panel via-panel/20 to-transparent"
+                          />
+                          <span className="font-display absolute top-3 left-4 text-sm text-zinc-300 tabular-nums">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                          <span className="absolute top-3 right-3 rounded bg-ink/70 px-2 py-0.5 text-[10px] tracking-widest text-zinc-300 uppercase">
+                            Verified fixture image
+                          </span>
+                          <p className="font-display absolute bottom-2 left-4 text-xl text-zinc-50">
+                            {r.opposition}
+                          </p>
+                        </div>
+                      ) : (
                         <div
-                          aria-hidden="true"
-                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-panel via-panel/20 to-transparent"
-                        />
-                        <span className="font-display absolute top-3 left-4 text-sm text-zinc-400 tabular-nums">
-                          {String(i + 1).padStart(2, '0')}
-                        </span>
-                        <span className="absolute top-3 right-3 rounded bg-ink/70 px-2 py-0.5 text-[10px] tracking-widest text-zinc-300 uppercase">
-                          {img.exactOppositionMatch ? 'From this fixture' : 'Representative image'}
-                        </span>
-                        <p className="font-display absolute bottom-2 left-4 text-xl text-zinc-50">
-                          {r.opposition}
-                        </p>
-                      </div>
+                          className="relative flex h-40 items-center justify-between overflow-hidden bg-panel-2 px-5"
+                          role="img"
+                          aria-label={`No verified photograph available for Kohli against ${r.opposition}`}
+                        >
+                          <div aria-hidden="true" className="flex items-center gap-4">
+                            <svg width="44" height="44" viewBox="0 0 22 22">
+                              <circle cx="11" cy="11" r="10" fill="none" stroke="#3a415a" strokeWidth="1.5" />
+                              <circle cx="11" cy="11" r="10" fill="#c8102e" opacity="0.25" />
+                              <path
+                                d="M7 4 Q11 11 7 18 M15 4 Q11 11 15 18"
+                                fill="none"
+                                stroke="#d9a93c"
+                                strokeWidth="1"
+                                strokeDasharray="2 1.6"
+                              />
+                            </svg>
+                            <div>
+                              <p className="font-display text-xl text-zinc-100">{r.opposition}</p>
+                              <p className="text-[11px] tracking-widest text-zinc-500 uppercase">
+                                Image unavailable
+                              </p>
+                            </div>
+                          </div>
+                          <span className="font-display text-sm text-zinc-500 tabular-nums">
+                            {String(i + 1).padStart(2, '0')}
+                          </span>
+                        </div>
+                      )}
                       <div className="px-4 py-3">
                         <div className="flex items-baseline justify-between gap-2">
                           <p className="text-xs text-zinc-500">
@@ -161,9 +192,15 @@ export default function AnalysisSection({
                             }}
                           />
                         </div>
-                        <p className="mt-2 text-[11px] text-zinc-600">
-                          {img.caption} · {img.creator}, {img.license}
-                        </p>
+                        {img ? (
+                          <p className="mt-2 text-[11px] text-zinc-600">
+                            {img.matchDescription} · {img.attribution}
+                          </p>
+                        ) : (
+                          <p className="mt-2 text-[11px] text-zinc-600">
+                            No verified photograph for this fixture — statistics only.
+                          </p>
+                        )}
                       </div>
                     </li>
                   );

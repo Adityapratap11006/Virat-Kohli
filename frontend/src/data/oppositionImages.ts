@@ -1,76 +1,101 @@
-// Licensed Kohli imagery keyed by opposition. exactOppositionMatch=true
-// only when the source caption ties the photo to that opposition.
-// Otherwise a representative licensed image is used and labelled as such.
+// Strict opposition-matched Kohli imagery. A record exists ONLY with
+// source metadata tying the photo to that opposition (Level 2).
+// exactMatch=true is reserved for a photo from the exact displayed knock
+// (Level 1; none verified yet). Anything else renders the Level-3
+// editorial fallback (ball graphic, "Image unavailable") — never a
+// generic Kohli photograph.
+export type ImageLevel = 'exact' | 'opposition';
+
 export interface OppositionImage {
   opposition: string;
-  src: string;
-  alt: string;
+  imagePath: string;
+  sourceUrl: string;
+  sourceName: string;
   creator: string;
   license: string;
-  sourceUrl: string;
-  exactOppositionMatch: boolean;
-  caption: string;
+  attribution: string;
+  matchAssociation: string;
+  matchDate: string;
+  matchDescription: string;
+  exactMatch: boolean;
+  level: ImageLevel;
 }
-
-export const FALLBACK_IMAGE: OppositionImage = {
-  opposition: '*',
-  src: '/images/virat-kohli-portrait.jpg',
-  alt: 'Portrait of Virat Kohli (representative image)',
-  creator: 'Anand Anil',
-  license: 'CC BY-SA 4.0',
-  sourceUrl: 'https://commons.wikimedia.org/wiki/File:Virat_Kohli_portrait.jpg',
-  exactOppositionMatch: false,
-  caption: 'Representative image',
-};
 
 const images: OppositionImage[] = [
   {
     opposition: 'South Africa',
-    src: '/images/virat-kohli-batting-2013.jpg',
-    alt: 'Virat Kohli batting against South Africa, 2013 Champions Trophy',
+    imagePath: '/images/virat-kohli-batting-2013.jpg',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Virat_Kohli_batting_2013.jpg',
+    sourceName: 'Wikimedia Commons',
     creator: 'Dee03',
     license: 'CC BY-SA 4.0',
-    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Virat_Kohli_batting_2013.jpg',
-    exactOppositionMatch: true,
-    caption: 'vs South Africa · Champions Trophy 2013',
+    attribution: 'Dee03, CC BY-SA 4.0, via Wikimedia Commons',
+    matchAssociation: 'India vs South Africa, ICC Champions Trophy 2013',
+    matchDate: '2013-06-06',
+    matchDescription: 'Kohli batting vs South Africa',
+    exactMatch: false,
+    level: 'opposition',
   },
   {
     opposition: 'West Indies',
-    src: '/images/virat-kohli-greenfield-2018.jpg',
-    alt: 'Virat Kohli at Greenfield Stadium during the West Indies series, 2018',
-    creator: 'Jishith',
-    license: 'CC BY-SA 4.0',
+    imagePath: '/images/virat-kohli-greenfield-2018.jpg',
     sourceUrl:
       'https://commons.wikimedia.org/wiki/File:Virat_Kohli_at_Greenfield_Stadium_1.11.2018.jpg',
-    exactOppositionMatch: true,
-    caption: 'vs West Indies · Thiruvananthapuram 2018',
+    sourceName: 'Wikimedia Commons',
+    creator: 'Jishith',
+    license: 'CC BY-SA 4.0',
+    attribution: 'Jishith, CC BY-SA 4.0, via Wikimedia Commons',
+    matchAssociation: 'India vs West Indies, Greenfield Stadium, 1 Nov 2018',
+    matchDate: '2018-11-01',
+    matchDescription: 'Kohli at the crease vs West Indies',
+    exactMatch: false,
+    level: 'opposition',
   },
   {
     opposition: 'New Zealand',
-    src: '/images/virat-kohli-batting-2010.jpg',
-    alt: 'Virat Kohli batting against New Zealand, December 2010',
+    imagePath: '/images/virat-kohli-batting-2010.jpg',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Virat_Kohli_Batting.jpg',
+    sourceName: 'Wikimedia Commons',
     creator: 'lensbug.chandru',
     license: 'CC BY 2.0',
-    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Virat_Kohli_Batting.jpg',
-    exactOppositionMatch: true,
-    caption: 'vs New Zealand · December 2010',
+    attribution: 'lensbug.chandru, CC BY 2.0, via Wikimedia Commons',
+    matchAssociation: 'India v New Zealand, 10 December 2010',
+    matchDate: '2010-12-10',
+    matchDescription: 'Kohli batting vs New Zealand',
+    exactMatch: false,
+    level: 'opposition',
   },
   {
     opposition: 'Australia',
-    src: '/images/virat-kohli-aus-2023.jpg',
-    alt: 'Virat Kohli with the Prime Ministers at the India vs Australia Test, Ahmedabad 2023',
-    creator: "Prime Minister's Office (India)",
-    license: 'GODL-India',
+    imagePath: '/images/virat-kohli-aus-2023.jpg',
     sourceUrl:
       'https://commons.wikimedia.org/wiki/File:Virat_Kohli_during_the_India_vs_Aus_4th_Test_match_at_Narendra_Modi_Stadium_on_09_March_2023.jpg',
-    exactOppositionMatch: true,
-    caption: 'India vs Australia · Ahmedabad 2023 (ceremony)',
+    sourceName: 'Wikimedia Commons (PMO India)',
+    creator: "Prime Minister's Office (India)",
+    license: 'GODL-India',
+    attribution: "Prime Minister's Office (GODL-India), via Wikimedia Commons",
+    matchAssociation: 'India vs Australia, 4th Test, Ahmedabad, 9 Mar 2023',
+    matchDate: '2023-03-09',
+    matchDescription: 'Kohli with the Prime Ministers at the fixture (ceremony photo)',
+    exactMatch: false,
+    level: 'opposition',
+  },
+  {
+    opposition: 'England',
+    imagePath: '/images/virat-kohli-england-2018.jpg',
+    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Captain_Kohli_(51821389332).jpg',
+    sourceName: 'Wikimedia Commons',
+    creator: "It's No Game (Duncan Hull)",
+    license: 'CC BY 2.0',
+    attribution: "It's No Game, CC BY 2.0, via Wikimedia Commons",
+    matchAssociation: 'India vs England, 3rd Test, Trent Bridge, Aug 2018',
+    matchDate: '2018-08-18',
+    matchDescription: 'Kohli batting vs England (Buttler keeping, Stokes at slip)',
+    exactMatch: false,
+    level: 'opposition',
   },
 ];
 
-export function imageFor(opposition: string): OppositionImage {
-  return images.find((i) => i.opposition === opposition) ?? {
-    ...FALLBACK_IMAGE,
-    opposition,
-  };
+export function imageFor(opposition: string): OppositionImage | null {
+  return images.find((i) => i.opposition === opposition) ?? null;
 }

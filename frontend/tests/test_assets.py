@@ -18,13 +18,17 @@ def test_images_exist_and_are_jpeg():
         assert p.read_bytes()[:2] == b"\xff\xd8", p.name
 
 
-def test_ts_paths_resolve_and_fallback_present():
+def test_ts_paths_resolve_and_strict_model():
     src = TS.read_text(encoding="utf-8")
     paths = set(re.findall(r"'(/images/[^']+)'", src))
-    assert "/images/virat-kohli-portrait.jpg" in paths  # fallback
     for path in paths:
         assert (REPO / "frontend" / "public" / path.lstrip("/")).exists(), path
-    assert "exactOppositionMatch" in src
+    # strict model: provenance fields mandatory, no generic fallback export
+    for field in ("sourceUrl", "sourceName", "creator", "license",
+                  "matchAssociation", "matchDate", "exactMatch"):
+        assert field in src
+    assert "FALLBACK_IMAGE" not in src
+    assert "Representative image" not in src
 
 
 def test_register_covers_images():
