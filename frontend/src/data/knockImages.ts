@@ -266,6 +266,29 @@ const knocks: KnockImage[] = [
     caption: 'Kohli — 94* vs West Indies, Hyderabad 2019',
   },
   {
+    matchId: '980969',
+    sourceMatchId: '980969',
+    opposition: 'Rising Pune Supergiant',
+    matchDate: '2016-05-07',
+    venue: 'M Chinnaswamy Stadium, Bengaluru',
+    format: 'IPL',
+    kohliRuns: 108,
+    imagePath: '/images/kohli-108-rps-2016.jpg',
+    sourceUrl:
+      'https://www.rediff.com/cricket/report/ipl-photos-chinnaswamy-match-report-virat-kohlis-ton-helps-royal-challengers-bangalore-ease-past-pune/20160507.htm',
+    sourceName: 'Rediff (PTI photograph)',
+    creator: 'PTI',
+    license: 'copyrighted',
+    licenseStatus: 'unverified',
+    attribution: 'PTI, via Rediff',
+    matchAssociation: 'exact_knock',
+    exactMatch: true,
+    sameOpposition: true,
+    rightsVerified: false,
+    rightsStatus: 'copyrighted',
+    caption: 'Kohli — 108* vs Rising Pune Supergiant, Bengaluru 2016',
+  },
+  {
     matchId: '980999',
     sourceMatchId: '980999',
     opposition: 'Punjab Kings',
@@ -349,6 +372,7 @@ const oppositionPreference: Record<string, string> = {
   'Punjab Kings': '980999',
   'Rajasthan Royals': '1422137',
   'Gujarat Lions': '980987',
+  'Rising Pune Supergiant': '980969',
 };
 
 export function knockImageFor(sourceMatchId: string): KnockImage | null {
