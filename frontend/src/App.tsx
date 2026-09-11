@@ -3,6 +3,7 @@ import { careerSummary, formatSummary, recentForm, searchPlayers, topInnings } f
 import type { FormatFilter } from './api/types';
 import AnalysisSection from './components/AnalysisSection';
 import CareerStats from './components/CareerStats';
+import ModelPrep from './components/ModelPrep';
 import CricketError from './components/CricketError';
 import CricketLoader from './components/CricketLoader';
 import Footer from './components/Footer';
@@ -107,6 +108,7 @@ export default function App() {
               />
               <TopKnocks items={top.data} loading={top.loading} error={top.error} onRetry={top.retry} />
               {pid !== null && <AnalysisSection playerId={pid} format={format} />}
+              <ModelPrep />
             </div>
           </>
         )}

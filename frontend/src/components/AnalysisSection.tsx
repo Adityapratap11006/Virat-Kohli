@@ -73,6 +73,24 @@ export default function AnalysisSection({
         Where and against whom the runs came — ranked by runs scored, ties broken
         deterministically. Every number from the database.
       </p>
+      <figure className="relative mt-6 overflow-hidden rounded-2xl border border-line">
+        <img
+          src="/images/virat-kohli-batting-2013.jpg"
+          alt="Virat Kohli batting against South Africa during the 2013 ICC Champions Trophy"
+          loading="lazy"
+          className="aspect-[21/8] w-full object-cover object-top"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent"
+        />
+        <figcaption className="absolute right-4 bottom-3 text-[11px] text-zinc-400">
+          Photo: Dee03, CC BY-SA 4.0, via Wikimedia Commons
+        </figcaption>
+        <p className="absolute bottom-3 left-5 font-display text-sm tracking-[0.25em] text-crease/90 uppercase">
+          At the crease
+        </p>
+      </figure>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-2">
         <div>
