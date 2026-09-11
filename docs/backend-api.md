@@ -61,9 +61,11 @@ hundreds, ducks, notOuts}]`. Opposition derived as the non-batting side.
 
 ### `GET /api/players/{playerId}/venue-summary`
 
-Ranked venue rows (same ordering):
-`[{venue, city, innings, runs, average, strikeRate, highestScore, fifties,
-hundreds, notOuts}]`. `city` is `null` where unrecorded — never invented.
+Ranked canonical-venue rows (same ordering):
+`[{venue, city, country, sourceNames, innings, runs, average, strikeRate,
+highestScore, fifties, hundreds, notOuts}]`. `venue`/`city`/`country` are
+the verified physical ground (Phase 6.1); `city`/`country` are `null` where
+unrecorded — never invented; `sourceNames` counts consolidated raw names.
 
 ### `GET /api/players/{playerId}/context-summary`
 

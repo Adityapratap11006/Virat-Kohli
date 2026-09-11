@@ -3,6 +3,8 @@ package com.kohliiq.dto;
 public record VenueRowDto(
         String venue,
         String city,
+        String country,
+        long sourceNames,
         long innings,
         long runs,
         Double average,

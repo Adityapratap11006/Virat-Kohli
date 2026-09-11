@@ -311,6 +311,9 @@ def ingest() -> None:
         team_ids = load_teams(conn, PROCESSED / "matches.jsonl")
         print("venues ...", flush=True)
         venue_ids = load_venues(conn, PROCESSED / "matches.jsonl")
+        print("canonical venues ...", flush=True)
+        from db.canonical_venues import load_canonical, load_rows
+        load_canonical(conn, load_rows())
         print("matches ...", flush=True)
         match_ids = load_matches(conn, team_ids, venue_ids)
         print("innings ...", flush=True)

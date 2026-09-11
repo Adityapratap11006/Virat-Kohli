@@ -39,7 +39,8 @@ public class AnalyticsService {
         playerService.requirePlayer(playerId);
         String fmt = QueryParams.formatOrNull(format);
         return analytics.venues(playerId, fmt).stream()
-                .map(a -> new VenueRowDto(a.venue(), a.city(), a.innings(), a.runs(),
+                .map(a -> new VenueRowDto(a.venue(), a.city(), a.country(),
+                        a.sourceNames(), a.innings(), a.runs(),
                         StatsService.average(a.runs(), a.dismissals()),
                         StatsService.strikeRate(a.runs(), a.ballsFaced()),
                         a.highestScore(), a.fifties(), a.hundreds(),

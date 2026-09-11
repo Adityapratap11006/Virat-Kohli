@@ -119,7 +119,13 @@ export default function AnalysisSection({
                 subOf="venue"
                 rows={ven.data.map((r) => ({
                   name: r.venue,
-                  sub: r.city ?? 'city not recorded',
+                  sub: [
+                    r.city ?? 'city not recorded',
+                    r.country ?? null,
+                    r.sourceNames > 1 ? `${r.sourceNames} source names consolidated` : null,
+                  ]
+                    .filter(Boolean)
+                    .join(' · '),
                   innings: r.innings,
                   runs: r.runs,
                   average: r.average,

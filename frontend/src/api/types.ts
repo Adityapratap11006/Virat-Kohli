@@ -65,6 +65,8 @@ export interface OppositionRow {
 export interface VenueRow {
   venue: string;
   city: string | null;
+  country: string | null;
+  sourceNames: number;
   innings: number;
   runs: number;
   average: number | null;

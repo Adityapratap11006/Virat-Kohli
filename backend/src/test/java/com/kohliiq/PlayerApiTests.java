@@ -21,7 +21,8 @@ class PlayerApiTests extends ContainerBase {
     void fixture() {
         jdbc.execute("SET FOREIGN_KEY_CHECKS=0");
         for (String t : new String[]{"batter_innings", "wickets", "deliveries",
-                "innings", "matches", "team_aliases", "venues", "teams", "players"}) {
+                "innings", "matches", "team_aliases", "venue_aliases",
+                "canonical_venues", "venues", "teams", "players"}) {
             jdbc.execute("TRUNCATE TABLE " + t);
         }
         jdbc.execute("SET FOREIGN_KEY_CHECKS=1");
@@ -29,7 +30,24 @@ class PlayerApiTests extends ContainerBase {
         jdbc.update("INSERT INTO teams (canonical_name) VALUES ('India'),('Australia'),('New Zealand')");
         jdbc.update("INSERT INTO venues (canonical_name, city, city_key, name_variants) "
                 + "VALUES ('Test Ground','Test City','Test City','[]'),"
-                + "('Second Ground',NULL,'','[]')");
+                + "('Second Ground',NULL,'','[]'),"
+                + "('Test Ground, Test City','Test City','Test City','[]')");
+        jdbc.update("INSERT INTO canonical_venues (canonical_key, canonical_name, city, country) VALUES "
+                + "('test-ground__test-city','Test Ground','Test City','Testland'),"
+                + "('second-ground__no-city','Second Ground',NULL,NULL)");
+        long cg1 = jdbc.queryForObject(
+                "SELECT id FROM canonical_venues WHERE canonical_key='test-ground__test-city'", Long.class);
+        long cg2 = jdbc.queryForObject(
+                "SELECT id FROM canonical_venues WHERE canonical_key='second-ground__no-city'", Long.class);
+        long raw1 = jdbc.queryForObject(
+                "SELECT id FROM venues WHERE canonical_name='Test Ground'", Long.class);
+        long raw2 = jdbc.queryForObject(
+                "SELECT id FROM venues WHERE canonical_name='Second Ground'", Long.class);
+        long raw3 = jdbc.queryForObject(
+                "SELECT id FROM venues WHERE canonical_name='Test Ground, Test City'", Long.class);
+        jdbc.update("INSERT INTO venue_aliases (raw_venue_id, canonical_venue_id, mapping_type, confidence, source) VALUES "
+                + "(?,?,'EXACT','high','test'),(?,?,'EXACT','high','test'),(?,?,'NORMALIZED_ALIAS','high','test')",
+                raw1, cg1, raw2, cg2, raw3, cg1);
         long nz = jdbc.queryForObject(
                 "SELECT id FROM teams WHERE canonical_name='New Zealand'", Long.class);
         long venue2 = jdbc.queryForObject(
@@ -37,7 +55,10 @@ class PlayerApiTests extends ContainerBase {
         jdbc.update("INSERT INTO players (player_code, display_name, name_variants,"
                 + " registry_ids, has_registry_id, ambiguous) VALUES "
                 + "('REG:ba607b88','V Kohli','[]','[]',1,0),"
-                + "('REG:40caa465','T Kohli','[]','[]',1,0)");
+                + "('REG:40caa465','T Kohli','[]','[]',1,0),"
+                + "('REG:c4000000','C Four','[]','[]',1,0)");
+        long cFour = jdbc.queryForObject(
+                "SELECT id FROM players WHERE player_code='REG:c4000000'", Long.class);
         kohliId = jdbc.queryForObject(
                 "SELECT id FROM players WHERE player_code='REG:ba607b88'", Long.class);
         long india = jdbc.queryForObject(
@@ -52,6 +73,9 @@ class PlayerApiTests extends ContainerBase {
         addMatch("M200", "T20I", "2024-02-10", india, aus, venue, india);
         addMatch("M300", "IPL", "2024-03-10", india, aus, venue, aus);
         addMatch("M400", "ODI", "2024-04-10", india, nz, venue2, nz);
+        long venue3 = jdbc.queryForObject(
+                "SELECT id FROM venues WHERE canonical_name='Test Ground, Test City'", Long.class);
+        addMatch("M500", "ODI", "2024-05-10", india, aus, venue3, india);
 
         // V Kohli: ODI 100(90) + 30(25) + 45*(40, chase); T20I 50*(40); IPL 0(2)
         addInnings(kohliId, "M100", 1, india, "ODI", "2024-01-10", 100, 90, true, "bowled", 3, true);
@@ -59,6 +83,9 @@ class PlayerApiTests extends ContainerBase {
         addInnings(kohliId, "M200", 1, india, "T20I", "2024-02-10", 50, 40, false, null, 3, true);
         addInnings(kohliId, "M300", 1, india, "IPL", "2024-03-10", 0, 2, true, "bowled", 4, true);
         addInnings(kohliId, "M400", 2, india, "ODI", "2024-04-10", 45, 40, false, null, 4, true);
+        // C Four bats at two raw spellings of the same canonical ground
+        addInnings(cFour, "M500", 1, india, "ODI", "2024-05-10", 20, 15, true, "bowled", 5, true);
+        addInnings(cFour, "M101", 1, india, "ODI", "2024-01-20", 10, 8, false, null, 6, true);
         // T Kohli: no innings (zero-state player)
     }
 
@@ -208,10 +235,42 @@ class PlayerApiTests extends ContainerBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
                 .andExpect(jsonPath("$[0].venue").value("Test Ground"))
+                .andExpect(jsonPath("$[0].city").value("Test City"))
+                .andExpect(jsonPath("$[0].country").value("Testland"))
                 .andExpect(jsonPath("$[0].runs").value(130))
                 .andExpect(jsonPath("$[1].venue").value("Second Ground"))
                 .andExpect(jsonPath("$[1].city").value(org.hamcrest.Matchers.nullValue()))
                 .andExpect(jsonPath("$[1].runs").value(45));
+    }
+
+    @Test
+    void venueAliasesCollapseToOneCanonicalRow() throws Exception {
+        long cFour = jdbc.queryForObject(
+                "SELECT id FROM players WHERE player_code='REG:c4000000'", Long.class);
+        mvc.perform(get("/api/players/" + cFour + "/venue-summary"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].venue").value("Test Ground"))
+                .andExpect(jsonPath("$[0].sourceNames").value(2))
+                .andExpect(jsonPath("$[0].innings").value(2))
+                .andExpect(jsonPath("$[0].runs").value(30));
+    }
+
+    @Test
+    void canonicalTotalsMatchCareerTotals() throws Exception {
+        String venues = mvc.perform(get("/api/players/" + kohliId + "/venue-summary")
+                        .param("format", "ODI"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        com.fasterxml.jackson.databind.JsonNode root =
+                new com.fasterxml.jackson.databind.ObjectMapper().readTree(venues);
+        long inns = 0, runs = 0;
+        for (com.fasterxml.jackson.databind.JsonNode r : root) {
+            inns += r.get("innings").asLong();
+            runs += r.get("runs").asLong();
+        }
+        org.junit.jupiter.api.Assertions.assertEquals(3, inns);
+        org.junit.jupiter.api.Assertions.assertEquals(175, runs);
     }
 
     @Test

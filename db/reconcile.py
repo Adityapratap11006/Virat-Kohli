@@ -107,11 +107,49 @@ def reconcile() -> dict:
         report["seven_run_deliveries"] = cur.fetchone()[0]
         if report["seven_run_deliveries"] != 2:
             errors.append("7-run deliveries changed")
+        cur.execute("SELECT COUNT(*), COUNT(DISTINCT canonical_key) FROM canonical_venues")
+        ncv, distinct_cv = cur.fetchone()
+        cur.execute("SELECT COUNT(*) FROM venue_aliases")
+        nal = cur.fetchone()[0]
+        cur.execute("SELECT COUNT(*) FROM venues")
+        nvenues = cur.fetchone()[0]
+        report["canonical_venues"] = {"rows": ncv, "distinct_keys": distinct_cv,
+                                      "aliases": nal, "raw_venues": nvenues}
+        if nal != nvenues:
+            errors.append(f"venue alias coverage: {nal} aliases for {nvenues} raw venues")
+        # canonical grouping must preserve exact totals (grouping only, no row changes)
+        cur.execute("SELECT COUNT(*), COALESCE(SUM(bi.runs),0), "
+                    "COALESCE(SUM(bi.balls_faced),0) FROM batter_innings bi "
+                    "JOIN matches m ON m.id=bi.match_id "
+                    "JOIN venue_aliases a ON a.raw_venue_id=m.venue_id")
+        canon_totals = cur.fetchone()
+        cur.execute("SELECT COUNT(*), COALESCE(SUM(runs),0), "
+                    "COALESCE(SUM(balls_faced),0) FROM batter_innings")
+        raw_totals = cur.fetchone()
+        report["venue_totals"] = {"canonical": list(canon_totals),
+                                  "raw": list(raw_totals)}
+        if tuple(canon_totals) != tuple(raw_totals):
+            errors.append(f"canonical totals diverged: {canon_totals} vs {raw_totals}")
+        cur.execute("SELECT COUNT(*), COALESCE(SUM(bi.runs),0) FROM batter_innings bi "
+                    "JOIN players p ON p.id=bi.player_id "
+                    "JOIN matches m ON m.id=bi.match_id "
+                    "JOIN venue_aliases a ON a.raw_venue_id=m.venue_id "
+                    "WHERE p.player_code=%s", (KOHLI_CODE,))
+        kn, kr = cur.fetchone()
+        report["kohli_canonical"] = {"rows": kn, "runs": kr}
+        cur.execute("SELECT COALESCE(SUM(bi.runs),0) FROM batter_innings bi "
+                    "JOIN players p ON p.id=bi.player_id WHERE p.player_code=%s",
+                    (KOHLI_CODE,))
+        kohli_raw_runs = cur.fetchone()[0]
+        if kr != kohli_raw_runs:
+            errors.append(f"kohli canonical runs {kr} != raw {kohli_raw_runs}")
+        if kn != KOHLI_ROWS:
+            errors.append(f"kohli canonical rows {kn} != {KOHLI_ROWS}")
         cur.close()
     finally:
         conn.close()
     report["errors"] = errors
-    print(json.dumps(report, indent=2))
+    print(json.dumps(report, indent=2, default=str))
     return report
 
 

@@ -44,7 +44,8 @@ def _clean(conn):
     cur = conn.cursor()
     cur.execute("SET FOREIGN_KEY_CHECKS=0")
     for t in ("batter_innings", "wickets", "deliveries", "innings", "matches",
-              "team_aliases", "venues", "teams", "players"):
+              "team_aliases", "venue_aliases", "canonical_venues", "venues",
+              "teams", "players"):
         cur.execute(f"TRUNCATE TABLE {t}")
     cur.execute("SET FOREIGN_KEY_CHECKS=1")
     conn.commit()

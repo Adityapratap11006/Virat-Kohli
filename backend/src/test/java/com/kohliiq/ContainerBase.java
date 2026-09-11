@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -77,15 +78,23 @@ public abstract class ContainerBase {
         JdbcTemplate tpl;
         try {
             tpl = new JdbcTemplate(ds);
-            Path migration = Paths.get("..", "db", "migrations",
-                    "V1__initial_schema.sql");
-        String sql = Files.readString(migration);
-        String noComments = Arrays.stream(sql.split("\n"))
-                .filter(l -> !l.strip().startsWith("--"))
-                .collect(Collectors.joining("\n"));
-        for (String stmt : noComments.split(";\\s*\n")) {
-            if (!stmt.isBlank()) {
-                tpl.execute(stmt);
+            Path dir = Paths.get("..", "db", "migrations");
+        List<Path> migrations;
+        try (var stream = Files.list(dir)) {
+            migrations = stream
+                    .filter(p -> p.getFileName().toString().matches("V\\d+__.*\\.sql"))
+                    .sorted()
+                    .collect(Collectors.toList());
+        }
+        for (Path migration : migrations) {
+            String sql = Files.readString(migration);
+            String noComments = Arrays.stream(sql.split("\n"))
+                    .filter(l -> !l.strip().startsWith("--"))
+                    .collect(Collectors.joining("\n"));
+            for (String stmt : noComments.split(";\\s*\n")) {
+                if (!stmt.isBlank()) {
+                    tpl.execute(stmt);
+                }
             }
         }
         } finally {

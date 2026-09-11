@@ -35,9 +35,10 @@ Errors: `{timestamp, status, error, message, path}` (`400` bad format/limit,
 Opposition row: `{opposition, innings, runs, average, strikeRate,
 highestScore, fifties, hundreds, ducks, notOuts}` — ranked runs DESC.
 
-Venue row: `{venue, city: string|null, innings, runs, average, strikeRate,
-highestScore, fifties, hundreds, notOuts}` — ranked runs DESC; null city
-renders as “city not recorded”.
+Venue row: `{venue, city: string|null, country: string|null,
+sourceNames: number, innings, runs, average, strikeRate, highestScore,
+fifties, hundreds, notOuts}` — ranked runs DESC; null city renders as
+“city not recorded”; show “N source names consolidated” when N > 1.
 
 Context: `{player, format, firstInnings, secondInnings, positions}` with
 blocks `{label, chase, innings, runs, average, strikeRate, highestScore,

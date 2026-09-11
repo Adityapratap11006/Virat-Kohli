@@ -28,11 +28,14 @@ public interface AnalyticsRepository extends Repository<BatterInnings, Long> {
                                          @Param("format") String format);
 
     @Query("SELECT new com.kohliiq.repository.VenueAggregate("
-            + "v.canonicalName, v.city, " + STATS + ") "
+            + "cv.canonicalName, cv.city, cv.country, COUNT(DISTINCT v.id), "
+            + STATS + ") "
             + "FROM BatterInnings b JOIN b.match m JOIN m.venue v "
+            + "JOIN VenueAlias va ON va.rawVenueId = v.id "
+            + "JOIN va.canonicalVenue cv "
             + "WHERE b.player.id = :playerId AND (:format IS NULL OR b.format = :format) "
-            + "GROUP BY v.canonicalName, v.city "
-            + "ORDER BY SUM(b.runs) DESC, COUNT(b) ASC, v.canonicalName ASC")
+            + "GROUP BY cv.canonicalName, cv.city, cv.country "
+            + "ORDER BY SUM(b.runs) DESC, COUNT(b) ASC, cv.canonicalName ASC")
     List<VenueAggregate> venues(@Param("playerId") Long playerId,
                                 @Param("format") String format);
 

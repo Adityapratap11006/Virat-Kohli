@@ -20,6 +20,9 @@ def main() -> None:
                            "batter_innings.jsonl", "players.json",
                            "teams.json", "venues.json")
                if not (PROCESSED / f).exists()]
+    if not (Path(__file__).resolve().parent.parent / "data" / "reference"
+            / "venue_aliases.csv").exists():
+        missing.append("data/reference/venue_aliases.csv")
     if missing:
         raise SystemExit(f"missing processed inputs: {missing} "
                          f"(run: python -m etl.pipeline.run)")

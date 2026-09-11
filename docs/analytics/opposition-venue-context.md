@@ -19,9 +19,11 @@ Formulas match Phase 4 career summaries.
 - **opposition** — the side that did not bat in that innings:
   `CASE WHEN batting_team = team1 THEN team2 ELSE team1 END`.
   Actual DB names; no invented abbreviations.
-- **venue** — match venue canonical name; `city` shown as-is, null stays
-  null (“city not recorded”). Same-named grounds in different cities are
-  separate rows (Phase 3 venue identity).
+- **venue** — canonical physical venue (Phase 6.1,
+  `docs/analytics/venue-canonicalization.md`): raw spellings collapse to
+  one row per verified ground; `city`/`country` shown as-is, null stays
+  null (“city not recorded”). Same-named grounds in different cities stay
+  separate rows.
 - **firstInnings / setting** — `innings_no = 1`.
 - **secondInnings / chasing** — `innings_no = 2` (limited-overs structural
   truth; 3 Kohli chase rows lack a recorded target and are still chases).
