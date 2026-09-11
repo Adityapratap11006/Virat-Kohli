@@ -49,6 +49,62 @@ export interface InningsEntry {
   matchId: string;
 }
 
+export interface OppositionRow {
+  opposition: string;
+  innings: number;
+  runs: number;
+  average: number | null;
+  strikeRate: number | null;
+  highestScore: number | null;
+  fifties: number;
+  hundreds: number;
+  ducks: number;
+  notOuts: number;
+}
+
+export interface VenueRow {
+  venue: string;
+  city: string | null;
+  innings: number;
+  runs: number;
+  average: number | null;
+  strikeRate: number | null;
+  highestScore: number | null;
+  fifties: number;
+  hundreds: number;
+  notOuts: number;
+}
+
+export interface ContextBlock {
+  label: string;
+  chase: boolean;
+  innings: number;
+  runs: number;
+  average: number | null;
+  strikeRate: number | null;
+  highestScore: number | null;
+  fifties: number;
+  hundreds: number;
+  ducks: number;
+  notOuts: number;
+}
+
+export interface PositionRow {
+  position: number;
+  innings: number;
+  runs: number;
+  average: number | null;
+  strikeRate: number | null;
+}
+
+export interface ContextSummary {
+  player: Player;
+  format: 'ODI' | 'T20I' | 'IPL' | null;
+  firstInnings: ContextBlock | null;
+  secondInnings: ContextBlock | null;
+  positions: PositionRow[];
+}
+
 export interface MatchDetail {
   matchId: string;
   format: string;

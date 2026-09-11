@@ -30,6 +30,20 @@ Errors: `{timestamp, status, error, message, path}` (`400` bad format/limit,
 `404` unknown player/match). Averages/rates are `null` when undefined
 (never 0/NaN) — render as "–".
 
+## Phase 6 shapes
+
+Opposition row: `{opposition, innings, runs, average, strikeRate,
+highestScore, fifties, hundreds, ducks, notOuts}` — ranked runs DESC.
+
+Venue row: `{venue, city: string|null, innings, runs, average, strikeRate,
+highestScore, fifties, hundreds, notOuts}` — ranked runs DESC; null city
+renders as “city not recorded”.
+
+Context: `{player, format, firstInnings, secondInnings, positions}` with
+blocks `{label, chase, innings, runs, average, strikeRate, highestScore,
+fifties, hundreds, ducks, notOuts}` (a block may be `null`) and
+`positions: [{position, innings, runs, average, strikeRate}]`.
+
 ## Example
 
 ```json

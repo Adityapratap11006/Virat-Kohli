@@ -26,9 +26,14 @@ class PlayerApiTests extends ContainerBase {
         }
         jdbc.execute("SET FOREIGN_KEY_CHECKS=1");
 
-        jdbc.update("INSERT INTO teams (canonical_name) VALUES ('India'),('Australia')");
+        jdbc.update("INSERT INTO teams (canonical_name) VALUES ('India'),('Australia'),('New Zealand')");
         jdbc.update("INSERT INTO venues (canonical_name, city, city_key, name_variants) "
-                + "VALUES ('Test Ground','Test City','Test City','[]')");
+                + "VALUES ('Test Ground','Test City','Test City','[]'),"
+                + "('Second Ground',NULL,'','[]')");
+        long nz = jdbc.queryForObject(
+                "SELECT id FROM teams WHERE canonical_name='New Zealand'", Long.class);
+        long venue2 = jdbc.queryForObject(
+                "SELECT id FROM venues WHERE canonical_name='Second Ground'", Long.class);
         jdbc.update("INSERT INTO players (player_code, display_name, name_variants,"
                 + " registry_ids, has_registry_id, ambiguous) VALUES "
                 + "('REG:ba607b88','V Kohli','[]','[]',1,0),"
@@ -39,18 +44,21 @@ class PlayerApiTests extends ContainerBase {
                 "SELECT id FROM teams WHERE canonical_name='India'", Long.class);
         long aus = jdbc.queryForObject(
                 "SELECT id FROM teams WHERE canonical_name='Australia'", Long.class);
-        long venue = jdbc.queryForObject("SELECT id FROM venues LIMIT 1", Long.class);
+        long venue = jdbc.queryForObject(
+                "SELECT id FROM venues WHERE canonical_name='Test Ground'", Long.class);
 
         addMatch("M100", "ODI", "2024-01-10", india, aus, venue, india);
         addMatch("M101", "ODI", "2024-01-20", india, aus, venue, aus);
         addMatch("M200", "T20I", "2024-02-10", india, aus, venue, india);
         addMatch("M300", "IPL", "2024-03-10", india, aus, venue, aus);
+        addMatch("M400", "ODI", "2024-04-10", india, nz, venue2, nz);
 
-        // V Kohli: ODI 100(90) + 30(25); T20I 50*(40); IPL 0(2)
-        addInnings(kohliId, "M100", 1, india, "ODI", "2024-01-10", 100, 90, true, "bowled");
-        addInnings(kohliId, "M101", 1, india, "ODI", "2024-01-20", 30, 25, true, "caught");
-        addInnings(kohliId, "M200", 1, india, "T20I", "2024-02-10", 50, 40, false, null);
-        addInnings(kohliId, "M300", 1, india, "IPL", "2024-03-10", 0, 2, true, "bowled");
+        // V Kohli: ODI 100(90) + 30(25) + 45*(40, chase); T20I 50*(40); IPL 0(2)
+        addInnings(kohliId, "M100", 1, india, "ODI", "2024-01-10", 100, 90, true, "bowled", 3, true);
+        addInnings(kohliId, "M101", 1, india, "ODI", "2024-01-20", 30, 25, true, "caught", 3, true);
+        addInnings(kohliId, "M200", 1, india, "T20I", "2024-02-10", 50, 40, false, null, 3, true);
+        addInnings(kohliId, "M300", 1, india, "IPL", "2024-03-10", 0, 2, true, "bowled", 4, true);
+        addInnings(kohliId, "M400", 2, india, "ODI", "2024-04-10", 45, 40, false, null, 4, true);
         // T Kohli: no innings (zero-state player)
     }
 
@@ -74,7 +82,7 @@ class PlayerApiTests extends ContainerBase {
 
     private void addInnings(long player, String sourceId, int ino, long team,
                             String format, String date, int runs, int balls,
-                            boolean dismissed, String kind) {
+                            boolean dismissed, String kind, Integer pos, boolean reliable) {
         long iid = jdbc.queryForObject(
                 "SELECT i.id FROM innings i JOIN matches m ON m.id=i.match_id "
                         + "WHERE m.source_match_id=? AND i.innings_no=?",
@@ -82,12 +90,13 @@ class PlayerApiTests extends ContainerBase {
         long mid = jdbc.queryForObject(
                 "SELECT id FROM matches WHERE source_match_id=?", Long.class, sourceId);
         jdbc.update("INSERT INTO batter_innings (player_id, match_id, innings_id,"
-                + " batting_team_id, match_date, format, batting_position_reliable,"
+                + " batting_team_id, match_date, format, batting_position,"
+                + " batting_position_reliable,"
                 + " runs, balls_faced, dismissal_kind, is_dismissed, entry_team_runs,"
                 + " entry_wickets_lost, entry_balls_bowled, entry_balls_remaining,"
-                + " source_file) VALUES (?,?,?,?,?,?,0,?,?,?,?,0,0,120,120,?)",
-                player, mid, iid, team, date, format, runs, balls, kind,
-                dismissed ? 1 : 0, sourceId + ".json");
+                + " source_file) VALUES (?,?,?,?,?,?,?, ?,?,?,?,?,0,0,120,120,?)",
+                player, mid, iid, team, date, format, pos, reliable ? 1 : 0, runs,
+                balls, kind, dismissed ? 1 : 0, sourceId + ".json");
     }
 
     @Test
@@ -103,10 +112,10 @@ class PlayerApiTests extends ContainerBase {
     void careerSummaryAllFormats() throws Exception {
         mvc.perform(get("/api/players/" + kohliId + "/career-summary"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.innings").value(4))
-                .andExpect(jsonPath("$.runs").value(180))
+                .andExpect(jsonPath("$.innings").value(5))
+                .andExpect(jsonPath("$.runs").value(225))
                 .andExpect(jsonPath("$.highestScore").value(100))
-                .andExpect(jsonPath("$.average").value(60.0))
+                .andExpect(jsonPath("$.average").value(75.0))
                 .andExpect(jsonPath("$.fifties").value(1))
                 .andExpect(jsonPath("$.hundreds").value(1))
                 .andExpect(jsonPath("$.ducks").value(1));
@@ -118,9 +127,9 @@ class PlayerApiTests extends ContainerBase {
                         .param("format", "ODI"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.format").value("ODI"))
-                .andExpect(jsonPath("$.innings").value(2))
-                .andExpect(jsonPath("$.runs").value(130))
-                .andExpect(jsonPath("$.average").value(65.0));
+                .andExpect(jsonPath("$.innings").value(3))
+                .andExpect(jsonPath("$.runs").value(175))
+                .andExpect(jsonPath("$.average").value(87.5));
     }
 
     @Test
@@ -149,10 +158,11 @@ class PlayerApiTests extends ContainerBase {
                         .param("limit", "2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].matchDate").value("2024-03-10"))
-                .andExpect(jsonPath("$[0].runs").value(0))
-                .andExpect(jsonPath("$[1].matchDate").value("2024-02-10"))
-                .andExpect(jsonPath("$[1].strikeRate").value(125.0));
+                .andExpect(jsonPath("$[0].matchDate").value("2024-04-10"))
+                .andExpect(jsonPath("$[0].runs").value(45))
+                .andExpect(jsonPath("$[0].opposition").value("New Zealand"))
+                .andExpect(jsonPath("$[1].matchDate").value("2024-03-10"))
+                .andExpect(jsonPath("$[1].strikeRate").value(0.0));
     }
 
     @Test
@@ -163,7 +173,75 @@ class PlayerApiTests extends ContainerBase {
                 .andExpect(jsonPath("$[0].runs").value(100))
                 .andExpect(jsonPath("$[0].opposition").value("Australia"))
                 .andExpect(jsonPath("$[1].runs").value(50))
-                .andExpect(jsonPath("$[2].runs").value(30));
+                .andExpect(jsonPath("$[2].runs").value(45));
+    }
+
+    @Test
+    void oppositionSummaryOdi() throws Exception {
+        mvc.perform(get("/api/players/" + kohliId + "/opposition-summary")
+                        .param("format", "ODI"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].opposition").value("Australia"))
+                .andExpect(jsonPath("$[0].innings").value(2))
+                .andExpect(jsonPath("$[0].runs").value(130))
+                .andExpect(jsonPath("$[0].average").value(65.0))
+                .andExpect(jsonPath("$[0].strikeRate").value(113.04))
+                .andExpect(jsonPath("$[1].opposition").value("New Zealand"))
+                .andExpect(jsonPath("$[1].average").value(org.hamcrest.Matchers.nullValue()));
+    }
+
+    @Test
+    void oppositionSummaryAllFormatsOrderedByRuns() throws Exception {
+        mvc.perform(get("/api/players/" + kohliId + "/opposition-summary"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].opposition").value("Australia"))
+                .andExpect(jsonPath("$[0].runs").value(180))
+                .andExpect(jsonPath("$[1].opposition").value("New Zealand"))
+                .andExpect(jsonPath("$[1].runs").value(45));
+    }
+
+    @Test
+    void venueSummaryHandlesNullCity() throws Exception {
+        mvc.perform(get("/api/players/" + kohliId + "/venue-summary")
+                        .param("format", "ODI"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].venue").value("Test Ground"))
+                .andExpect(jsonPath("$[0].runs").value(130))
+                .andExpect(jsonPath("$[1].venue").value("Second Ground"))
+                .andExpect(jsonPath("$[1].city").value(org.hamcrest.Matchers.nullValue()))
+                .andExpect(jsonPath("$[1].runs").value(45));
+    }
+
+    @Test
+    void contextSummarySplitsInningsAndPositions() throws Exception {
+        mvc.perform(get("/api/players/" + kohliId + "/context-summary"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstInnings.innings").value(4))
+                .andExpect(jsonPath("$.firstInnings.runs").value(180))
+                .andExpect(jsonPath("$.firstInnings.chase").value(false))
+                .andExpect(jsonPath("$.secondInnings.innings").value(1))
+                .andExpect(jsonPath("$.secondInnings.runs").value(45))
+                .andExpect(jsonPath("$.secondInnings.chase").value(true))
+                .andExpect(jsonPath("$.secondInnings.average").value(org.hamcrest.Matchers.nullValue()))
+                .andExpect(jsonPath("$.positions.length()").value(2))
+                .andExpect(jsonPath("$.positions[0].position").value(3))
+                .andExpect(jsonPath("$.positions[0].runs").value(180))
+                .andExpect(jsonPath("$.positions[0].average").value(90.0))
+                .andExpect(jsonPath("$.positions[1].position").value(4))
+                .andExpect(jsonPath("$.positions[1].average").value(45.0));
+    }
+
+    @Test
+    void analyticsRejectBadInput() throws Exception {
+        mvc.perform(get("/api/players/" + kohliId + "/opposition-summary")
+                        .param("format", "TEST"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(get("/api/players/999999/venue-summary"))
+                .andExpect(status().isNotFound());
+        mvc.perform(get("/api/players/999999/context-summary"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

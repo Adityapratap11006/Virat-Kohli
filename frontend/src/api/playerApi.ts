@@ -1,11 +1,14 @@
 import { apiGet } from './client';
 import type {
   CareerSummary,
+  ContextSummary,
   FormatFilter,
   FormatSummary,
   InningsEntry,
   MatchDetail,
+  OppositionRow,
   Player,
+  VenueRow,
 } from './types';
 
 export function searchPlayers(query: string): Promise<Player[]> {
@@ -41,4 +44,25 @@ export function topInnings(
 
 export function matchDetail(matchId: string): Promise<MatchDetail> {
   return apiGet<MatchDetail>(`/matches/${matchId}`);
+}
+
+export function oppositionSummary(
+  playerId: number,
+  format: FormatFilter,
+): Promise<OppositionRow[]> {
+  const q = format === 'ALL' ? '' : `?format=${format}`;
+  return apiGet<OppositionRow[]>(`/players/${playerId}/opposition-summary${q}`);
+}
+
+export function venueSummary(playerId: number, format: FormatFilter): Promise<VenueRow[]> {
+  const q = format === 'ALL' ? '' : `?format=${format}`;
+  return apiGet<VenueRow[]>(`/players/${playerId}/venue-summary${q}`);
+}
+
+export function contextSummary(
+  playerId: number,
+  format: FormatFilter,
+): Promise<ContextSummary> {
+  const q = format === 'ALL' ? '' : `?format=${format}`;
+  return apiGet<ContextSummary>(`/players/${playerId}/context-summary${q}`);
 }

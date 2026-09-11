@@ -3,6 +3,7 @@ const links = [
   { href: '#formats', label: 'Formats' },
   { href: '#form', label: 'Form' },
   { href: '#top-knocks', label: 'Top Knocks' },
+  { href: '#analysis', label: 'Analysis' },
 ];
 
 export default function Navbar() {

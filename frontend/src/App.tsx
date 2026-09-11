@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { careerSummary, formatSummary, recentForm, searchPlayers, topInnings } from './api/playerApi';
 import type { FormatFilter } from './api/types';
+import AnalysisSection from './components/AnalysisSection';
 import CareerStats from './components/CareerStats';
 import CricketError from './components/CricketError';
 import CricketLoader from './components/CricketLoader';
@@ -105,6 +106,7 @@ export default function App() {
                 onRetry={recent.retry}
               />
               <TopKnocks items={top.data} loading={top.loading} error={top.error} onRetry={top.retry} />
+              {pid !== null && <AnalysisSection playerId={pid} format={format} />}
             </div>
           </>
         )}

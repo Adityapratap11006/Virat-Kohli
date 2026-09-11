@@ -32,6 +32,9 @@ class PlayerControllerTest {
     @MockitoBean
     private StatsService stats;
 
+    @MockitoBean
+    private com.kohliiq.service.AnalyticsService analytics;
+
     @Test
     void searchReturnsPlayers() throws Exception {
         when(players.search(any(), any())).thenReturn(

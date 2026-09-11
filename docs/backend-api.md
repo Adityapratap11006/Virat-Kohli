@@ -47,6 +47,37 @@ no SQL leakage. IDs below are database surrogate keys (`players.id`).
 - “Top Knocks by Runs” — sorted `runs DESC, ballsFaced ASC, matchDate DESC`.
   Same row shape as recent-form.
 
+## Analytics (Phase 6)
+
+All endpoints take optional `?format=ODI|T20I|IPL` (absent = all formats).
+Formulas per `docs/analytics/opposition-venue-context.md`; averages/rates
+are `null` when undefined.
+
+### `GET /api/players/{playerId}/opposition-summary`
+
+Ranked opposition rows (runs DESC, innings ASC, name ASC):
+`[{opposition, innings, runs, average, strikeRate, highestScore, fifties,
+hundreds, ducks, notOuts}]`. Opposition derived as the non-batting side.
+
+### `GET /api/players/{playerId}/venue-summary`
+
+Ranked venue rows (same ordering):
+`[{venue, city, innings, runs, average, strikeRate, highestScore, fifties,
+hundreds, notOuts}]`. `city` is `null` where unrecorded — never invented.
+
+### `GET /api/players/{playerId}/context-summary`
+
+`{player, format, firstInnings, secondInnings, positions}` where each
+innings block is
+`{label, chase, innings, runs, average, strikeRate, highestScore, fifties,
+hundreds, ducks, notOuts}` (`chase` is true for second innings by
+limited-overs structure; a block is `null` when the player never batted in
+it) and `positions` is
+`[{position, innings, runs, average, strikeRate}]` for reliable positions
+only, ordered by position.
+
+Same `400`/`404` behavior as Phase 4 endpoints.
+
 ## Matches
 
 ### `GET /api/matches/{matchId}`

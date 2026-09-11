@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kohliiq.dto.CareerSummaryDto;
 import com.kohliiq.dto.FormatSummaryDto;
 import com.kohliiq.dto.InningsEntryDto;
+import com.kohliiq.dto.ContextSummaryDto;
+import com.kohliiq.dto.OppositionRowDto;
 import com.kohliiq.dto.PlayerDto;
+import com.kohliiq.dto.VenueRowDto;
+import com.kohliiq.service.AnalyticsService;
 import com.kohliiq.service.PlayerService;
 import com.kohliiq.service.StatsService;
 
@@ -20,10 +24,13 @@ import com.kohliiq.service.StatsService;
 public class PlayerController {
     private final PlayerService players;
     private final StatsService stats;
+    private final AnalyticsService analytics;
 
-    public PlayerController(PlayerService players, StatsService stats) {
+    public PlayerController(PlayerService players, StatsService stats,
+                            AnalyticsService analytics) {
         this.players = players;
         this.stats = stats;
+        this.analytics = analytics;
     }
 
     @GetMapping
@@ -60,5 +67,23 @@ public class PlayerController {
                                             @RequestParam(required = false) String format,
                                             @RequestParam(required = false) Integer limit) {
         return stats.topInnings(playerId, format, limit);
+    }
+
+    @GetMapping("/{playerId}/opposition-summary")
+    public List<OppositionRowDto> opposition(@PathVariable Long playerId,
+                                             @RequestParam(required = false) String format) {
+        return analytics.opposition(playerId, format);
+    }
+
+    @GetMapping("/{playerId}/venue-summary")
+    public List<VenueRowDto> venues(@PathVariable Long playerId,
+                                    @RequestParam(required = false) String format) {
+        return analytics.venues(playerId, format);
+    }
+
+    @GetMapping("/{playerId}/context-summary")
+    public ContextSummaryDto context(@PathVariable Long playerId,
+                                     @RequestParam(required = false) String format) {
+        return analytics.context(playerId, format);
     }
 }
