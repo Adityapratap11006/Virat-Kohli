@@ -54,9 +54,24 @@ supports unverified/action-tier images when a suitable one appears.
 | Ireland | none (ball-graphic fallback) | n/a | n/a | n/a — no reusable source found |
 | IPL franchises + associates | none (ball-graphic fallback) | n/a | n/a | n/a — out of scope for fixture photos |
 
-No exact-knock (Level 1) photograph is verified for any displayed knock;
-per-knock "exact match" claims are therefore never made. Pakistan 183 has
-no verified photo — the card correctly shows the fallback.
+## Exact-knock registry (Tier 1, all match-verified, rights stated separately)
+
+| Opposition | Image | Match association | Exact match | Same opposition | Source | Rights status |
+| ---------- | ----- | ----------------- | ----------- | --------------- | ------ | ------------- |
+| Pakistan | kohli-183-pakistan-2012.jpg | 183, Asia Cup, Mirpur, 18 Mar 2012 (match 535798) | Yes (exact knock) | Yes | ESPNcricinfo gallery, AFP photo | copyrighted |
+| Pakistan | kohli-82-pakistan-2022.jpg | 82*, T20 World Cup, MCG, 23 Oct 2022 (match 1298150) | Yes (exact knock) | Yes | ESPNcricinfo gallery, Getty photo | copyrighted |
+| South Africa | kohli-160-sa-2018.jpg | 160*, Newlands, 7 Feb 2018 (match 1122281) | Yes (exact knock) | Yes | Rediff, BCCI photo | copyrighted |
+| Sri Lanka | kohli-166-sl-2023.jpg | 166*, Thiruvananthapuram, 15 Jan 2023 (match 1348645) | Yes (exact knock) | Yes | ESPNcricinfo gallery, AP photo | copyrighted |
+| New Zealand | kohli-154-nz-2016.jpg | 154*, Mohali, 23 Oct 2016 (match 1030223) | Yes (exact knock) | Yes | Rediff, BCCI photo | copyrighted |
+| West Indies | kohli-140-wi-2018.jpg | 140, Guwahati, 21 Oct 2018 (match 1157754) | Yes (exact knock) | Yes | ESPNcricinfo gallery, AP photo | copyrighted |
+| Bangladesh | kohli-136-ban-2014.jpg | 136, Fatullah, 26 Feb 2014 (match 710293) | Yes (exact knock) | Yes | ESPNcricinfo gallery, AFP photo | copyrighted |
+| Afghanistan | kohli-122-afg-2022.jpg | 122*, Dubai, 8 Sep 2022 (match 1327279) | Yes (exact knock) | Yes | ESPNcricinfo gallery, Getty photo | copyrighted |
+
+Opposition cards prefer the iconic exact knock (Pakistan→183, SA→160*,
+SL→166*, NZ→154*, WI→140*, Ban→136*, Afg→122*); England and Australia
+keep their verified same-opposition photos. Knocks without an exact photo
+(Zimbabwe, Ireland, IPL franchises, remaining innings) show "Exact match
+image unavailable" — never a mismatched photograph. Mismatched images: 0.
 
 Notes:
 

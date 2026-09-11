@@ -1,7 +1,30 @@
 import { contextSummary, oppositionSummary, venueSummary } from '../api/playerApi';
 import type { FormatFilter } from '../api/types';
+import { preferredKnockFor } from '../data/knockImages';
 import { imageFor } from '../data/oppositionImages';
 import { useApi } from '../hooks/useApi';
+
+function oppositionVisual(opposition: string) {
+  const knock = preferredKnockFor(opposition);
+  if (knock) {
+    return {
+      src: knock.imagePath,
+      alt: knock.caption,
+      badge: 'From this exact match',
+      caption: `${knock.caption} · ${knock.attribution}`,
+    };
+  }
+  const img = imageFor(opposition);
+  if (img) {
+    return {
+      src: img.imagePath,
+      alt: img.matchDescription,
+      badge: `Kohli batting vs ${opposition}`,
+      caption: `${img.matchDescription} · ${img.attribution}`,
+    };
+  }
+  return null;
+}
 import CricketEmptyState from './CricketEmptyState';
 import CricketError from './CricketError';
 import CricketLoader from './CricketLoader';
@@ -107,7 +130,7 @@ export default function AnalysisSection({
             {opp.data && !opp.loading && !opp.error && opp.data.length > 0 && (
               <ol aria-label="Opposition" className="grid gap-4 sm:grid-cols-2">
                 {opp.data.map((r, i) => {
-                  const img = imageFor(r.opposition);
+                  const img = oppositionVisual(r.opposition);
                   return (
                     <li
                       key={r.opposition}
@@ -116,8 +139,8 @@ export default function AnalysisSection({
                       {img ? (
                         <div className="relative h-40 overflow-hidden">
                           <img
-                            src={img.imagePath}
-                            alt={img.matchDescription}
+                            src={img.src}
+                            alt={img.alt}
                             loading="lazy"
                             className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                             onError={(e) => {
@@ -132,11 +155,7 @@ export default function AnalysisSection({
                             {String(i + 1).padStart(2, '0')}
                           </span>
                           <span className="absolute top-3 right-3 rounded bg-ink/70 px-2 py-0.5 text-[10px] tracking-widest text-zinc-300 uppercase">
-                            {img.level === 'exact'
-                              ? 'From this exact match'
-                              : img.level === 'action'
-                                ? 'Virat Kohli in action'
-                                : `Kohli batting vs ${r.opposition}`}
+                            {img.badge}
                           </span>
                           <p className="font-display absolute bottom-2 left-4 text-xl text-zinc-50">
                             {r.opposition}
@@ -197,9 +216,7 @@ export default function AnalysisSection({
                           />
                         </div>
                         {img ? (
-                          <p className="mt-2 text-[11px] text-zinc-600">
-                            {img.matchDescription} · {img.attribution}
-                          </p>
+                          <p className="mt-2 text-[11px] text-zinc-600">{img.caption}</p>
                         ) : (
                           <p className="mt-2 text-[11px] text-zinc-600">
                             No verified photograph for this fixture — statistics only.

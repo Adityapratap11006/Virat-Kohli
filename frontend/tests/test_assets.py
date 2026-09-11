@@ -88,6 +88,57 @@ def test_fallback_branch_exists():
     assert "Image unavailable" in comp
 
 
+def _knocks():
+    src = (REPO / "frontend" / "src" / "data" / "knockImages.ts"
+           ).read_text(encoding="utf-8")
+    blocks = re.findall(r"\{([^{}]*sourceMatchId:[^{}]*)\}", src, re.S)
+    recs = []
+    for b in blocks:
+        if "imagePath: '" not in b:
+            continue
+        rec = dict(re.findall(r"(\w+):\s*'([^']*)'", b))
+        for k, v in re.findall(r"(\w+):\s*(true|false)", b):
+            rec[k] = v
+        for k, v in re.findall(r"(\w+):\s*(\d+)", b):
+            rec[k] = v
+        recs.append(rec)
+    return src, recs
+
+
+def test_knock_opposition_never_mismatched():
+    _, recs = _knocks()
+    assert len(recs) >= 8, "expected at least 8 exact-knock records"
+    for r in recs:
+        assoc = (r.get("matchAssociation", "") + " " + r.get("caption", "")).lower()
+        assert r["opposition"].lower() in assoc, r["imagePath"]
+
+
+def test_knock_exactness_requires_metadata():
+    _, recs = _knocks()
+    for r in recs:
+        if r.get("exactMatch") == "true":
+            assert r.get("matchDate") and r.get("venue") and r.get("sourceMatchId")
+            assert r.get("matchAssociation") in ("exact_knock", "exact_match")
+        assert r.get("rightsStatus") in ("verified", "copyrighted", "unknown",
+                                         "unverified")
+        if r.get("rightsVerified") == "true":
+            assert r.get("license") not in ("", "unverified")
+
+
+def test_knock_images_exist_and_are_jpeg():
+    _, recs = _knocks()
+    for r in recs:
+        p = REPO / "frontend" / "public" / r["imagePath"].lstrip("/")
+        assert p.exists(), r["imagePath"]
+        assert p.read_bytes()[:2] == b"\xff\xd8", r["imagePath"]
+
+
+def test_knock_match_ids_wellformed():
+    _, recs = _knocks()
+    for r in recs:
+        assert re.fullmatch(r"\d+", r["sourceMatchId"]), r["sourceMatchId"]
+
+
 def test_register_covers_images():
     reg = REGISTER.read_text(encoding="utf-8")
     for p in IMG.glob("*.jpg"):
@@ -101,6 +152,9 @@ def test_every_image_used_or_documented():
     comps = "".join(
         p.read_text(encoding="utf-8")
         for p in (REPO / "frontend" / "src" / "components").rglob("*.tsx"))
-    used = src + app + comps
+    data = "".join(
+        p.read_text(encoding="utf-8")
+        for p in (REPO / "frontend" / "src" / "data").rglob("*.ts"))
+    used = src + app + comps + data
     for p in IMG.glob("*.jpg"):
         assert p.name in used, p.name
