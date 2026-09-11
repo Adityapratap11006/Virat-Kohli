@@ -7,6 +7,8 @@ data/ml/
 # Model binaries / artifacts
 ml/artifacts/*
 !ml/artifacts/.gitkeep
+ml/models/**/*.pkl
+ml/models/**/*.ubj
 
 # Python
 __pycache__/
