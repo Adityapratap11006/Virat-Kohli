@@ -1,5 +1,6 @@
 import { contextSummary, oppositionSummary, venueSummary } from '../api/playerApi';
 import type { FormatFilter } from '../api/types';
+import { imageFor } from '../data/oppositionImages';
 import { useApi } from '../hooks/useApi';
 import CricketEmptyState from './CricketEmptyState';
 import CricketError from './CricketError';
@@ -104,19 +105,70 @@ export default function AnalysisSection({
               <CricketEmptyState message="No opposition data in this view yet." />
             )}
             {opp.data && !opp.loading && !opp.error && opp.data.length > 0 && (
-              <RankedRows
-                nameOf="Opposition"
-                subOf="opposition"
-                rows={opp.data.map((r) => ({
-                  name: r.opposition,
-                  sub: `${r.hundreds}×100 ${r.fifties}×50`,
-                  innings: r.innings,
-                  runs: r.runs,
-                  average: r.average,
-                  strikeRate: r.strikeRate,
-                  highestScore: r.highestScore,
-                }))}
-              />
+              <ol aria-label="Opposition" className="grid gap-4 sm:grid-cols-2">
+                {opp.data.map((r, i) => {
+                  const img = imageFor(r.opposition);
+                  return (
+                    <li
+                      key={r.opposition}
+                      className="group overflow-hidden rounded-2xl border border-line/70 bg-panel transition-all hover:-translate-y-1 hover:border-gold/40"
+                    >
+                      <div className="relative h-40 overflow-hidden">
+                        <img
+                          src={img.src}
+                          alt={img.alt}
+                          loading="lazy"
+                          className="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                          }}
+                        />
+                        <div
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-panel via-panel/20 to-transparent"
+                        />
+                        <span className="font-display absolute top-3 left-4 text-sm text-zinc-400 tabular-nums">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span className="absolute top-3 right-3 rounded bg-ink/70 px-2 py-0.5 text-[10px] tracking-widest text-zinc-300 uppercase">
+                          {img.exactOppositionMatch ? 'From this fixture' : 'Representative image'}
+                        </span>
+                        <p className="font-display absolute bottom-2 left-4 text-xl text-zinc-50">
+                          {r.opposition}
+                        </p>
+                      </div>
+                      <div className="px-4 py-3">
+                        <div className="flex items-baseline justify-between gap-2">
+                          <p className="text-xs text-zinc-500">
+                            {r.innings} inns · avg {avg(r.average)} · SR {avg(r.strikeRate)} · HS{' '}
+                            {r.highestScore ?? '–'}
+                          </p>
+                          <p className="font-display text-2xl tabular-nums">
+                            <span className={i === 0 ? 'text-gold' : 'text-zinc-100'}>
+                              {r.runs.toLocaleString('en-IN')}
+                            </span>
+                          </p>
+                        </div>
+                        <div
+                          className="mt-2 h-1 overflow-hidden rounded-full bg-panel-2"
+                          role="img"
+                          aria-label={`${r.runs} runs against ${r.opposition}`}
+                        >
+                          <div
+                            className={`h-full rounded-full ${i === 0 ? 'bg-gold' : 'bg-gold/50'}`}
+                            style={{
+                              width: `${Math.max(3, (r.runs / Math.max(1, opp.data?.[0]?.runs ?? 1)) * 100)}%`,
+                            }}
+                          />
+                        </div>
+                        <p className="mt-2 text-[11px] text-zinc-600">
+                          {img.caption} · {img.creator}, {img.license}
+                        </p>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
             )}
           </div>
         </div>
