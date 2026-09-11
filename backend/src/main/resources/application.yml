@@ -1,11 +1,22 @@
 spring:
   application:
     name: kohliiq-backend
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://127.0.0.1:3307/kohliiq}
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:kohliiq-dev}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
 server:
   port: 8080
 
-# Phase 3+ will add datasource config via environment variables:
-# spring.datasource.url: ${MYSQL_URL:jdbc:mysql://localhost:3306/kohliiq}
-# spring.datasource.username: ${MYSQL_USER:kohliiq}
-# spring.datasource.password: ${MYSQL_PASSWORD:changeme}
+kohliiq:
+  cors:
+    allowed-origins: http://localhost:5173
